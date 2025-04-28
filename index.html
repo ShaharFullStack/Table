@@ -5,114 +5,350 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ניתוח מתחרים</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4caf50;
+            --danger-color: #f44336;
+            --info-color: #2196F3;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Heebo', Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f0f2f5;
+            color: var(--dark-color);
         }
-        h1 {
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2 {
             text-align: center;
-            color: #333;
+            color: var(--dark-color);
             margin-bottom: 30px;
+            font-weight: 700;
         }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 10px 0;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 50px;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
             background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+        
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            padding: 15px;
             text-align: right;
+            vertical-align: top;
         }
+        
         th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
         }
-        .input-cell {
-            min-height: 80px;
-            width: 100%;
+        
+        tr:nth-child(even) {
+            background-color: rgba(67, 97, 238, 0.05);
         }
+        
+        tr:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            transition: var(--transition);
+        }
+        
+        .contentEditable {
+            min-height: 30px;
+            border: 1px solid transparent;
+            padding: 8px;
+            border-radius: 4px;
+            transition: var(--transition);
+            cursor: text;
+        }
+        
+        .contentEditable:focus {
+            outline: none;
+            background-color: #f8f9fa;
+            border: 1px solid var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .contentEditable:hover:not(:focus) {
+            background-color: #f0f7ff;
+        }
+        
         .buttons {
-            margin-bottom: 20px;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
         }
+        
         button {
-            padding: 10px 15px;
-            margin: 0 10px;
-            background-color: #4CAF50;
+            padding: 12px 20px;
+            margin: 0;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             cursor: pointer;
             font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        
         button:hover {
-            background-color: #45a049;
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #addRowBtn, #addProfileRowBtn, #addInfoRowBtn {
+            background-color: var(--success-color);
+        }
+        
+        #addRowBtn:hover, #addProfileRowBtn:hover, #addInfoRowBtn:hover {
+            background-color: #3d8b40;
+        }
+        
+        #deleteRowBtn, #deleteProfileRowBtn, #deleteInfoRowBtn {
+            background-color: var(--danger-color);
+        }
+        
+        #deleteRowBtn:hover, #deleteProfileRowBtn:hover, #deleteInfoRowBtn:hover {
+            background-color: #d32f2f;
+        }
+        
         #exportBtn {
-            background-color: #2196F3;
+            background-color: var(--info-color);
         }
+        
         #exportBtn:hover {
             background-color: #0b7dda;
         }
-        #deleteRowBtn {
-            background-color: #f44336;
-        }
-        #deleteRowBtn:hover {
-            background-color: #d32f2f;
-        }
-        .contentEditable {
-            min-height: 50px;
-            border: 1px solid #eee;
-            padding: 5px;
-            background-color: #f9f9f9;
-        }
-        .contentEditable:focus {
-            outline: none;
-            background-color: #fff;
-            border: 1px solid #ccc;
+        
+        /* מדיה קוורי להתאמה למסכים קטנים */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>ניתוח מתחרים</h1>
+    <div class="container">
+        <h1>ניתוח מתחרים</h1>
+        
+        <div class="table-container">
+            <div class="buttons">
+                <button id="addRowBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    הוסף שורה
+                </button>
+                <button id="deleteRowBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    מחק שורה אחרונה
+                </button>
+                <button id="exportBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    ייצא לקובץ CSV
+                </button>
+            </div>
+            
+            <table id="competitorsTable">
+                <thead>
+                    <tr>
+                        <th>שם</th>
+                        <th>היכן הוא מפרסם</th>
+                        <th>חוזקות</th>
+                        <th>חולשות</th>
+                        <th>בידול שלי</th>
+                        <th>מחיר</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="contentEditable" contenteditable="true">בית פתוח</div></td>
+                        <td><div class="contentEditable" contenteditable="true">פורטל של בעלי עסקים בעולם החינוך, מקודם בגוגל</div></td>
+                        <td><div class="contentEditable" contenteditable="true">יש לו הרבה נכסים, נראה משדרג ותיק</div></td>
+                        <td><div class="contentEditable" contenteditable="true">מתוך גם מגרשים, גם גנים, לא מומחיות</div></td>
+                        <td><div class="contentEditable" contenteditable="true">חדשנות, התחייבות - לא ברור עד הסוף</div></td>
+                        <td><div class="contentEditable" contenteditable="true"></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     
-    <div class="buttons">
-        <button id="addRowBtn">הוסף שורה</button>
-        <button id="deleteRowBtn">מחק שורה אחרונה</button>
-        <button id="exportBtn">ייצא לקובץ CSV</button>
-    </div>
-    
-    <table id="competitorsTable">
-        <thead>
-            <tr>
-                <th>שם</th>
-                <th>היכן הוא מפרסם</th>
-                <th>חוזקות</th>
-                <th>חולשות</th>
-                <th>בידול שלי</th>
-                <th>מחיר</th>
-            </tr>
-        </thead>
+        <div class="section-header">
+            <h2>פרופיל אישי</h2>
+        </div>
+        
+        <div class="table-container">
+            <div class="buttons">
+                <button id="addProfileRowBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    הוסף שורה
+                </button>
+                <button id="deleteProfileRowBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    מחק שורה אחרונה
+                </button>
+            </div>
+            
+            <table id="profileTable">
+                <thead>
+                    <tr>
+                        <th>שם</th>
+                        <th>גיל</th>
+                        <th>מגדר</th>
+                        <th>רמת הכנסה</th>
+                        <th>השכלה</th>
+                        <th>תחומי עניין</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="contentEditable" contenteditable="true"></div></td>
+                        <td><div class="contentEditable" contenteditable="true"></div></td>
+                        <td><div class="contentEditable" contenteditable="true"></div></td>
+                        <td><div class="contentEditable" contenteditable="true"></div></td>
+                        <td><div class="contentEditable" contenteditable="true"></div></td>
+                        <td><div class="contentEditable" contenteditable="true"></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section-header">
+            <h2>מידע נוסף</h2>
+        </div>
+        
+        <div class="table-container">
+            <div class="buttons">
+                <button id="addInfoRowBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    הוסף שורה
+                </button>
+                <button id="deleteInfoRowBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    מחק שורה אחרונה
+                </button>
+            </div>
         <tbody>
             <tr>
                 <td>
-                    <div class="contentEditable" contenteditable="true"></div>
+                    <div class="contentEditable" contenteditable="true">בית פתוח</div>
                 </td>
                 <td>
-                    <div class="contentEditable" contenteditable="true"></div>
+                    <div class="contentEditable" contenteditable="true">פורטל של בעלי עסקים בעולם החינוך, מקודם בגוגל</div>
                 </td>
                 <td>
-                    <div class="contentEditable" contenteditable="true"></div>
+                    <div class="contentEditable" contenteditable="true">יש לו הרבה נכסים, נראה משדרג ותיק</div>
                 </td>
                 <td>
-                    <div class="contentEditable" contenteditable="true"></div>
+                    <div class="contentEditable" contenteditable="true">מתוך גם מגרשים, גם גנים, לא מומחיות</div>
                 </td>
                 <td>
-                    <div class="contentEditable" contenteditable="true"></div>
+                    <div class="contentEditable" contenteditable="true">חדשנות, התחייבות - לא ברור עד הסוף</div>
                 </td>
                 <td>
                     <div class="contentEditable" contenteditable="true"></div>
@@ -121,15 +357,84 @@
         </tbody>
     </table>
     
+    <h2 style="margin-top: 50px; text-align: center;">פרופיל אישי</h2>
+    
+    <div class="buttons">
+        <button id="addProfileRowBtn">הוסף שורה</button>
+        <button id="deleteProfileRowBtn">מחק שורה אחרונה</button>
+    </div>
+    
+    <table id="profileTable">
+        <thead>
+            <tr>
+                <th>שם</th>
+                <th>גיל</th>
+                <th>מגדר</th>
+                <th>רמת הכנסה</th>
+                <th>השכלה</th>
+                <th>תחומי עניין</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2 style="margin-top: 50px; text-align: center;">מידע נוסף</h2>
+    
+    <div class="buttons">
+        <button id="addInfoRowBtn">הוסף שורה</button>
+        <button id="deleteInfoRowBtn">מחק שורה אחרונה</button>
+    </div>
+    
+    <table id="additionalInfoTable">
+        <thead>
+            <tr>
+                <th>מצב משפחתי</th>
+                <th>אזור מגורים</th>
+                <th>תחומי עניין ותחביבים</th>
+                <th>ערוצים מועדפים בדיגיטל</th>
+                <th>קבוצות/פורומים</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+                <td><div class="contentEditable" contenteditable="true"></div></td>
+            </tr>
+        </tbody>
+    </table>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const table = document.getElementById('competitorsTable');
-            const tbody = table.querySelector('tbody');
+            const competitorsTable = document.getElementById('competitorsTable');
+            const profileTable = document.getElementById('profileTable');
+            const additionalInfoTable = document.getElementById('additionalInfoTable');
+            
+            const competitorsTbody = competitorsTable.querySelector('tbody');
+            const profileTbody = profileTable.querySelector('tbody');
+            const additionalInfoTbody = additionalInfoTable.querySelector('tbody');
+            
             const addRowBtn = document.getElementById('addRowBtn');
             const deleteRowBtn = document.getElementById('deleteRowBtn');
+            const addProfileRowBtn = document.getElementById('addProfileRowBtn');
+            const deleteProfileRowBtn = document.getElementById('deleteProfileRowBtn');
+            const addInfoRowBtn = document.getElementById('addInfoRowBtn');
+            const deleteInfoRowBtn = document.getElementById('deleteInfoRowBtn');
+            
             const exportBtn = document.getElementById('exportBtn');
             
-            // הוספת שורה חדשה
+            // הוספת שורה חדשה לטבלת מתחרים
             addRowBtn.addEventListener('click', function() {
                 const newRow = document.createElement('tr');
                 
@@ -142,24 +447,79 @@
                     newRow.appendChild(td);
                 }
                 
-                tbody.appendChild(newRow);
+                competitorsTbody.appendChild(newRow);
             });
             
-            // מחיקת שורה אחרונה
+            // מחיקת שורה אחרונה מטבלת מתחרים
             deleteRowBtn.addEventListener('click', function() {
-                if (tbody.children.length > 1) {
-                    tbody.removeChild(tbody.lastChild);
+                if (competitorsTbody.children.length > 1) {
+                    competitorsTbody.removeChild(competitorsTbody.lastChild);
                 } else {
                     alert('לא ניתן למחוק את השורה האחרונה בטבלה!');
                 }
             });
             
+            // הוספת שורה חדשה לטבלת פרופיל
+            addProfileRowBtn.addEventListener('click', function() {
+                const newRow = document.createElement('tr');
+                
+                for (let i = 0; i < 6; i++) {
+                    const td = document.createElement('td');
+                    const div = document.createElement('div');
+                    div.className = 'contentEditable';
+                    div.contentEditable = 'true';
+                    td.appendChild(div);
+                    newRow.appendChild(td);
+                }
+                
+                profileTbody.appendChild(newRow);
+            });
+            
+            // מחיקת שורה אחרונה מטבלת פרופיל
+            deleteProfileRowBtn.addEventListener('click', function() {
+                if (profileTbody.children.length > 1) {
+                    profileTbody.removeChild(profileTbody.lastChild);
+                } else {
+                    alert('לא ניתן למחוק את השורה האחרונה בטבלה!');
+                }
+            });
+            
+            // הוספת שורה חדשה לטבלת מידע נוסף
+            addInfoRowBtn.addEventListener('click', function() {
+                const newRow = document.createElement('tr');
+                
+                for (let i = 0; i < 5; i++) {
+                    const td = document.createElement('td');
+                    const div = document.createElement('div');
+                    div.className = 'contentEditable';
+                    div.contentEditable = 'true';
+                    td.appendChild(div);
+                    newRow.appendChild(td);
+                }
+                
+                additionalInfoTbody.appendChild(newRow);
+            });
+            
+            // מחיקת שורה אחרונה מטבלת מידע נוסף
+            deleteInfoRowBtn.addEventListener('click', function() {
+                if (additionalInfoTbody.children.length > 1) {
+                    additionalInfoTbody.removeChild(additionalInfoTbody.lastChild);
+                } else {
+                    alert('לא ניתן למחוק את השורה האחרונה בטבלה!');
+                }
+            });
+            
+            
             // ייצוא לקובץ CSV
             exportBtn.addEventListener('click', function() {
-                let csvContent = "שם,היכן הוא מפרסם,חוזקות,חולשות,בידול שלי,מחיר\n";
+                let csvContent = "";
                 
-                const rows = tbody.querySelectorAll('tr');
-                rows.forEach(row => {
+                // ייצוא טבלת מתחרים
+                csvContent += "טבלת ניתוח מתחרים\n";
+                csvContent += "שם,היכן הוא מפרסם,חוזקות,חולשות,בידול שלי,מחיר\n";
+                
+                const competitorsRows = competitorsTbody.querySelectorAll('tr');
+                competitorsRows.forEach(row => {
                     const cells = row.querySelectorAll('.contentEditable');
                     const rowData = [];
                     
@@ -174,11 +534,198 @@
                     csvContent += rowData.join(',') + '\n';
                 });
                 
+                // ייצוא טבלת פרופיל
+                csvContent += "\n\nטבלת פרופיל אישי\n";
+                csvContent += "שם,גיל,מגדר,רמת הכנסה,השכלה,תחומי עניין\n";
+                
+                const profileRows = profileTbody.querySelectorAll('tr');
+                profileRows.forEach(row => {
+                    const cells = row.querySelectorAll('.contentEditable');
+                    const rowData = [];
+                    
+                    cells.forEach(cell => {
+                        let cellContent = cell.textContent.replace(/,/g, ';').replace(/\n/g, ' ');
+                        rowData.push('"' + cellContent + '"');
+                    });
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                // ייצוא טבלת מידע נוסף
+                csvContent += "\n\nטבלת מידע נוסף\n";
+                csvContent += "מצב משפחתי,אזור מגורים,תחומי עניין ותחביבים,ערוצים מועדפים בדיגיטל,קבוצות/פורומים\n";
+                
+                const additionalInfoRows = additionalInfoTbody.querySelectorAll('tr');
+                additionalInfoRows.forEach(row => {
+                    const cells = row.querySelectorAll('.contentEditable');
+                    const rowData = [];
+                    
+                    cells.forEach(cell => {
+                        let cellContent = cell.textContent.replace(/,/g, ';').replace(/\n/g, ' ');
+                        rowData.push('"' + cellContent + '"');
+                    });
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.setAttribute('href', url);
-                link.setAttribute('download', 'ניתוח_מתחרים.csv');
+                link.setAttribute('download', 'נתוני_שיווק.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // הוספת אירועים לפוקוס על תאים
+            document.querySelectorAll('.contentEditable').forEach(cell => {
+                // כשנכנסים לתא
+                cell.addEventListener('focus', function() {
+                    this.closest('tr').style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+                });
+                
+                // כשיוצאים מהתא
+                cell.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        this.closest('tr').style.backgroundColor = '';
+                    }, 300);
+                });
+            });
+
+            // פונקציה להוספת אירועים לתאים חדשים
+            function addCellEvents() {
+                document.querySelectorAll('.contentEditable').forEach(cell => {
+                    cell.addEventListener('focus', function() {
+                        this.closest('tr').style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+                    });
+                    
+                    cell.addEventListener('blur', function() {
+                        setTimeout(() => {
+                            this.closest('tr').style.backgroundColor = '';
+                        }, 300);
+                    });
+                });
+            }
+
+            // הוספת אירועים לתאים אחרי הוספת שורה חדשה
+            ['addRowBtn', 'addProfileRowBtn', 'addInfoRowBtn'].forEach(btnId => {
+                document.getElementById(btnId).addEventListener('click', function() {
+                    setTimeout(addCellEvents, 50);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                    
+                    cells.forEach(cell => {
+                        let cellContent = cell.textContent.replace(/,/g, ';').replace(/\n/g, ' ');
+                        rowData.push('"' + cellContent + '"');
+                    });
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                // ייצוא טבלת מידע נוסף
+                csvContent += "\n\nטבלת מידע נוסף\n";
+                csvContent += "מצב משפחתי,אזור מגורים,תחומי עניין ותחביבים,ערוצים מועדפים בדיגיטל,קבוצות/פורומים\n";
+                
+                const additionalInfoRows = additionalInfoTbody.querySelectorAll('tr');
+                additionalInfoRows.forEach(row => {
+                    const cells = row.querySelectorAll('.contentEditable');
+                    const rowData = [];
+                    
+                    cells.forEach(cell => {
+                        let cellContent = cell.textContent.replace(/,/g, ';').replace(/\n/g, ' ');
+                        rowData.push('"' + cellContent + '"');
+                    });
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'נתוני_שיווק.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // הוספת אירועים לפוקוס על תאים
+            document.querySelectorAll('.contentEditable').forEach(cell => {
+                // כשנכנסים לתא
+                cell.addEventListener('focus', function() {
+                    this.closest('tr').style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+                });
+                
+                // כשיוצאים מהתא
+                cell.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        this.closest('tr').style.backgroundColor = '';
+                    }, 300);
+                });
+            });
+
+            // פונקציה להוספת אירועים לתאים חדשים
+            function addCellEvents() {
+                document.querySelectorAll('.contentEditable').forEach(cell => {
+                    cell.addEventListener('focus', function() {
+                        this.closest('tr').style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+                    });
+                    
+                    cell.addEventListener('blur', function() {
+                        setTimeout(() => {
+                            this.closest('tr').style.backgroundColor = '';
+                        }, 300);
+                    });
+                });
+            }
+
+            // הוספת אירועים לתאים אחרי הוספת שורה חדשה
+            ['addRowBtn', 'addProfileRowBtn', 'addInfoRowBtn'].forEach(btnId => {
+                document.getElementById(btnId).addEventListener('click', function() {
+                    setTimeout(addCellEvents, 50);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+                    cells.forEach(cell => {
+                        let cellContent = cell.textContent.replace(/,/g, ';').replace(/\n/g, ' ');
+                        rowData.push('"' + cellContent + '"');
+                    });
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                // ייצוא טבלת מידע נוסף
+                csvContent += "\n\nטבלת מידע נוסף\n";
+                csvContent += "מצב משפחתי,אזור מגורים,תחומי עניין ותחביבים,ערוצים מועדפים בדיגיטל,קבוצות/פורומים\n";
+                
+                const additionalInfoRows = additionalInfoTbody.querySelectorAll('tr');
+                additionalInfoRows.forEach(row => {
+                    const cells = row.querySelectorAll('.contentEditable');
+                    const rowData = [];
+                    
+                    cells.forEach(cell => {
+                        let cellContent = cell.textContent.replace(/,/g, ';').replace(/\n/g, ' ');
+                        rowData.push('"' + cellContent + '"');
+                    });
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'נתוני_שיווק.csv');
                 link.style.visibility = 'hidden';
                 document.body.appendChild(link);
                 link.click();
