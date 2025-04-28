@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניתוח מתחרים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: right;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .input-cell {
+            min-height: 80px;
+            width: 100%;
+        }
+        .buttons {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 0 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #exportBtn {
+            background-color: #2196F3;
+        }
+        #exportBtn:hover {
+            background-color: #0b7dda;
+        }
+        #deleteRowBtn {
+            background-color: #f44336;
+        }
+        #deleteRowBtn:hover {
+            background-color: #d32f2f;
+        }
+        .contentEditable {
+            min-height: 50px;
+            border: 1px solid #eee;
+            padding: 5px;
+            background-color: #f9f9f9;
+        }
+        .contentEditable:focus {
+            outline: none;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>ניתוח מתחרים</h1>
+    
+    <div class="buttons">
+        <button id="addRowBtn">הוסף שורה</button>
+        <button id="deleteRowBtn">מחק שורה אחרונה</button>
+        <button id="exportBtn">ייצא לקובץ CSV</button>
+    </div>
+    
+    <table id="competitorsTable">
+        <thead>
+            <tr>
+                <th>שם</th>
+                <th>היכן הוא מפרסם</th>
+                <th>חוזקות</th>
+                <th>חולשות</th>
+                <th>בידול שלי</th>
+                <th>מחיר</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="contentEditable" contenteditable="true"></div>
+                </td>
+                <td>
+                    <div class="contentEditable" contenteditable="true"></div>
+                </td>
+                <td>
+                    <div class="contentEditable" contenteditable="true"></div>
+                </td>
+                <td>
+                    <div class="contentEditable" contenteditable="true"></div>
+                </td>
+                <td>
+                    <div class="contentEditable" contenteditable="true"></div>
+                </td>
+                <td>
+                    <div class="contentEditable" contenteditable="true"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const table = document.getElementById('competitorsTable');
+            const tbody = table.querySelector('tbody');
+            const addRowBtn = document.getElementById('addRowBtn');
+            const deleteRowBtn = document.getElementById('deleteRowBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            
+            // הוספת שורה חדשה
+            addRowBtn.addEventListener('click', function() {
+                const newRow = document.createElement('tr');
+                
+                for (let i = 0; i < 6; i++) {
+                    const td = document.createElement('td');
+                    const div = document.createElement('div');
+                    div.className = 'contentEditable';
+                    div.contentEditable = 'true';
+                    td.appendChild(div);
+                    newRow.appendChild(td);
+                }
+                
+                tbody.appendChild(newRow);
+            });
+            
+            // מחיקת שורה אחרונה
+            deleteRowBtn.addEventListener('click', function() {
+                if (tbody.children.length > 1) {
+                    tbody.removeChild(tbody.lastChild);
+                } else {
+                    alert('לא ניתן למחוק את השורה האחרונה בטבלה!');
+                }
+            });
+            
+            // ייצוא לקובץ CSV
+            exportBtn.addEventListener('click', function() {
+                let csvContent = "שם,היכן הוא מפרסם,חוזקות,חולשות,בידול שלי,מחיר\n";
+                
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('.contentEditable');
+                    const rowData = [];
+                    
+                    cells.forEach(cell => {
+                        // להחליף פסיקים בתוכן כדי למנוע בעיות בקובץ CSV
+                        let cellContent = cell.textContent.replace(/,/g, ';');
+                        // להחליף שורות חדשות בתוכן
+                        cellContent = cellContent.replace(/\n/g, ' ');
+                        rowData.push('"' + cellContent + '"');
+                    });
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'ניתוח_מתחרים.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
+</body>
+</html>
