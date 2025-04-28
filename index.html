@@ -11,22 +11,55 @@
             --primary-color: #4361ee;
             --secondary-color: #3f37c9;
             --accent-color: #4895ef;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
             --success-color: #4caf50;
             --danger-color: #f44336;
             --info-color: #2196F3;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --light-bg-color: #f0f2f5;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --light-card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --text-color: #333333;
+            --header-text-color: #ffffff;
+            
+            --border-radius: 12px;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            
+            /* מצב ברירת מחדל - בהיר */
+            --bg-color: var(--light-bg-color);
+            --card-bg: var(--light-card-bg);
+            --text: var(--text-color);
+            --border: var(--border-color);
+        }
+        
+        [data-theme="dark"] {
+            --primary-color: #6366f1;
+            --secondary-color: #818cf8;
+            --accent-color: #60a5fa;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --bg-color: #1f2937;
+            --card-bg: #111827;
+            --text: #e5e7eb;
+            --border: #374151;
+            --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         
         body {
             font-family: 'Heebo', Arial, sans-serif;
-            margin: 0;
-            padding: 30px;
-            background-color: #f0f2f5;
-            color: var(--dark-color);
+            background-color: var(--bg-color);
+            color: var(--text);
+            transition: var(--transition);
+            min-height: 100vh;
+            padding: 2rem;
         }
         
         .container {
@@ -35,9 +68,15 @@
             padding: 20px;
         }
         
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
         h1, h2 {
             text-align: center;
-            color: var(--dark-color);
             margin-bottom: 30px;
             font-weight: 700;
         }
@@ -64,29 +103,49 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .section-header:before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            width: 60px;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
         }
         
         .table-container {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             padding: 25px;
             margin-bottom: 40px;
             overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .table-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
         
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-bottom: 20px;
-            background-color: white;
+            background-color: var(--card-bg);
         }
         
         th, td {
             padding: 15px;
             text-align: right;
-            vertical-align: top;
+            vertical-align: middle;
+            position: relative;
         }
         
         th {
@@ -95,47 +154,66 @@
             font-weight: 500;
             position: sticky;
             top: 0;
+            z-index: 10;
+        }
+        
+        th:first-child {
+            border-top-right-radius: 8px;
+        }
+        
+        th:last-child {
+            border-top-left-radius: 8px;
         }
         
         tr:nth-child(even) {
-            background-color: rgba(67, 97, 238, 0.05);
+            background-color: rgba(67, 97, 238, 0.07);
+        }
+        
+        tr {
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        tr:last-child {
+            border-bottom: none;
         }
         
         tr:hover {
-            background-color: rgba(67, 97, 238, 0.1);
-            transition: var(--transition);
+            background-color: rgba(67, 97, 238, 0.12);
         }
         
         .contentEditable {
             min-height: 30px;
             border: 1px solid transparent;
-            padding: 8px;
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 6px;
             transition: var(--transition);
             cursor: text;
+            position: relative;
+            z-index: 1;
         }
         
         .contentEditable:focus {
             outline: none;
-            background-color: #f8f9fa;
+            background-color: rgba(var(--primary-color-rgb, 67, 97, 238), 0.05);
             border: 1px solid var(--accent-color);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
         
         .contentEditable:hover:not(:focus) {
-            background-color: #f0f7ff;
+            background-color: rgba(var(--primary-color-rgb, 67, 97, 238), 0.03);
         }
         
         .buttons {
             display: flex;
             justify-content: center;
             gap: 15px;
+            flex-wrap: wrap;
             margin-bottom: 25px;
         }
         
         button {
             padding: 12px 20px;
-            margin: 0;
             background-color: var(--primary-color);
             color: white;
             border: none;
@@ -148,10 +226,27 @@
             gap: 8px;
             transition: var(--transition);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        button:hover:before {
+            transform: translateX(0);
         }
         
         button:hover {
-            background-color: var(--secondary-color);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
@@ -165,7 +260,8 @@
         }
         
         #addRowBtn:hover, #addProfileRowBtn:hover, #addInfoRowBtn:hover {
-            background-color: #3d8b40;
+            background-color: var(--success-color);
+            opacity: 0.9;
         }
         
         #deleteRowBtn, #deleteProfileRowBtn, #deleteInfoRowBtn {
@@ -173,7 +269,8 @@
         }
         
         #deleteRowBtn:hover, #deleteProfileRowBtn:hover, #deleteInfoRowBtn:hover {
-            background-color: #d32f2f;
+            background-color: var(--danger-color);
+            opacity: 0.9;
         }
         
         #exportBtn {
@@ -181,7 +278,86 @@
         }
         
         #exportBtn:hover {
-            background-color: #0b7dda;
+            background-color: var(--info-color);
+            opacity: 0.9;
+        }
+        
+        .theme-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            margin-right: 20px;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            right: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(-26px);
+        }
+        
+        .slider:after {
+            content: '☀️';
+            position: absolute;
+            left: 7px;
+            bottom: 3px;
+            font-size: 14px;
+        }
+        
+        input:checked + .slider:after {
+            content: '🌙';
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+        }
+        
+        .theme-toggle span {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        #theme-status {
+            margin-left: 10px;
+            font-size: 14px;
+            opacity: 0.8;
         }
         
         /* מדיה קוורי להתאמה למסכים קטנים */
@@ -212,12 +388,50 @@
             th, td {
                 padding: 10px;
             }
+            
+            .header {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .theme-toggle {
+                margin: 0;
+            }
+        }
+        
+        /* אנימציות */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .table-container {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .table-container:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .table-container:nth-child(3) {
+            animation-delay: 0.4s;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ניתוח מתחרים</h1>
+        <div class="header">
+            <h1>ניתוח מתחרים</h1>
+            <div class="theme-toggle">
+                <span>מצב תצוגה</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span id="theme-status">בהיר</span>
+            </div>
+        </div>
         
         <div class="table-container">
             <div class="buttons">
@@ -373,8 +587,33 @@
             const deleteProfileRowBtn = document.getElementById('deleteProfileRowBtn');
             const addInfoRowBtn = document.getElementById('addInfoRowBtn');
             const deleteInfoRowBtn = document.getElementById('deleteInfoRowBtn');
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeStatus = document.getElementById('theme-status');
             
             const exportBtn = document.getElementById('exportBtn');
+            
+            // בדיקה אם יש העדפת מצב שמורה
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) {
+                document.documentElement.setAttribute('data-theme', currentTheme);
+                if (currentTheme === 'dark') {
+                    themeToggle.checked = true;
+                    themeStatus.textContent = 'כהה';
+                }
+            }
+            
+            // מעבר בין מצבים בהירים וכהים
+            themeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeStatus.textContent = 'כהה';
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeStatus.textContent = 'בהיר';
+                }
+            });
             
             // פונקציה ליצירת שורה חדשה
             function createNewRow(columnsCount) {
